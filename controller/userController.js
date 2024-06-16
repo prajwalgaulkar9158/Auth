@@ -1,4 +1,5 @@
 import authUSer from "../schema/userSchema.js"
+
 const createUser= async(req,res)=>{
     try {
         const data = req.body
