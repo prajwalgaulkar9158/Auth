@@ -30,4 +30,5 @@ const userSchema= new mongoose.Schema({
       
 })
 
-export default mongoose.model(authUser,userSchema)
+export default mongoose.model("authUser",userSchema)
+
