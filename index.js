@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 mongoose
   .connect(process.env.MongoUrl, { useNewUrlParser: true })
-  .then(() => console.log("MongoDB is connected"))
+  .then(() => console.log("MongoDB is connected Succesfuly"))
   .catch((error) => console.log(error));
 
 app.use((req, res, next) => {
