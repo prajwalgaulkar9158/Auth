@@ -6,6 +6,7 @@ export const checkUserData = () => {
     body("lname").trim().notEmpty().withMessage("Last name is required"),
     body("title").isIn(["Mr", "Mrs", "Miss"]).withMessage("Invalid title"),
     body("email").isEmail().withMessage("Invalid email address"),
+    body("username").trim().notEmpty().withMessage("username is required"),
     body("password")
       .isLength({ min: 6 })
       .withMessage("Password must be at least 6 characters long"),
