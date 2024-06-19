@@ -7,6 +7,8 @@ import{checkError}from "../validator/index.js"
 
 
  route.post('/create-user',checkUserData(),checkError,userController.userCreate)
+ route.post('/verify-email',userController.verifyEmail)
+ route.get('/verify/:token',userController.verifyResFromMail)
 
 
  export default route
