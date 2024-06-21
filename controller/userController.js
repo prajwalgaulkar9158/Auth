@@ -1,7 +1,12 @@
 import { createUser } from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { sendMail } from "../email/sendMail.js";
+import {
+  sendMail,
+  sendOTP,
+  otpVerification,
+} from "../helper.js/verfication.js";
+
 const userCreate = async (req, res) => {
   try {
     const data = req.body;
@@ -48,12 +53,10 @@ const verifyEmail = async (req, res) => {
       .json({ status: true, message: "Email Successfully Send !" });
   } catch (error) {
     console.log(error);
-    return res
-      .status(500)
-      .json({
-        status: false,
-        error: "Server Error While verifing the Email !",
-      });
+    return res.status(500).json({
+      status: false,
+      error: "Server Error While verifing the Email !",
+    });
   }
 };
 
@@ -69,12 +72,50 @@ export const verifyResFromMail = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    return res
-      .status(500)
-      .json({
-        status: false,
-        error: "Server Error While verifing the Email Response!",
-      });
+    return res.status(500).json({
+      status: false,
+      error: "Server Error While verifing the Email Response!",
+    });
+  }
+};
+
+const verifyContactNumber = async (req, res) => {
+  try {
+    const { error, status } = await sendOTP(req.body.contact);
+    if (error && !status) {
+      console.log(error);
+      return res
+        .status(400)
+        .json({ status: false, error: "Error While verifing the Contact !" });
+    }
+    return res.json({
+      status: true,
+      message: "Mobile Number Verify Successfully !",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      status: false,
+      error: "Server Error While verifing the Contact Number!",
+    });
+  }
+};
+
+const verifyOtp = async (req, res) => {
+  try {
+    const { otp, contact } = req.body;
+    const { status, error } = await otpVerification(otp, contact);
+    if (error || !status) {
+      console.log(error);
+      return res.status(400).json({ status: false, error: "OTP Invalid!" });
+    }
+    res.status(200).json({ status: true, message: "OTP Verified..!" });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      status: false,
+      error: "Server Error While verifing the otp !",
+    });
   }
 };
 
@@ -82,4 +123,6 @@ export default {
   userCreate,
   verifyEmail,
   verifyResFromMail,
+  verifyContactNumber,
+  verifyOtp,
 };

@@ -26,3 +26,24 @@ export const checkUserData = () => {
   ];
   return userdata;
 };
+
+export const checkVerifyEmailData = () => {
+  const userdata = [
+    body("fname").trim().notEmpty().withMessage("First name is required"),
+    body("lname").trim().notEmpty().withMessage("Last name is required"),
+    body("email").isEmail().withMessage("Invalid email address"),
+
+  ];
+  return userdata;
+};
+
+export const checkVerifyContactNumber=()=>{
+  const userData=[
+    body("fname").trim().notEmpty().withMessage("First name is required"),
+    body("lname").trim().notEmpty().withMessage("Last name is required"),
+    body("contact").notEmpty().withMessage("Phone number Required")
+
+  ]
+  return userData;
+
+}

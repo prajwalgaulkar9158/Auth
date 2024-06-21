@@ -1,5 +1,4 @@
-import nodemailer from "nodemailer";
-import { smpt, email } from "../config/config.js";
+import { smpt, email, twilioClient, twilioConfig } from "../config/config.js";
 
 export const sendMail = async (token, emailTo) => {
   try {
@@ -25,6 +24,37 @@ export const sendMail = async (token, emailTo) => {
       .catch((err) => {
         return { err };
       });
+  } catch (error) {
+    return { error };
+  }
+};
+
+const storedVerificationOTP = {};
+
+export const sendOTP = async (contact) => {
+  try {
+    const randomNumber = Math.random() * 9000;
+    const otp = Math.floor(randomNumber);
+    storedVerificationOTP[contact] = otp;
+    await twilioClient.messages.create({
+      from: twilioConfig.twilioCnt,
+      to: contact,
+      body: `Your One Time Password (OTP) For Prajwal First App is ${otp}`,
+    });
+    return { status: true };
+  } catch (error) {
+    return { error };
+  }
+};
+
+export const otpVerification = async (otp, contact) => {
+  try {
+    if (storedVerificationOTP[contact] == otp) {
+      delete storedVerificationOTP[contact]
+      return { status: true };
+    } else {
+      return { status: false };
+    }
   } catch (error) {
     return { error };
   }
