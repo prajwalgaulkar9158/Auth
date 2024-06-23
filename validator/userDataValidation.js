@@ -45,5 +45,19 @@ export const checkVerifyContactNumber=()=>{
 
   ]
   return userData;
+}
 
+export const checkGoogleAuth=()=>{
+  const userData=[
+    body("user.email").trim().isEmail().withMessage("provide email in user obj")
+  ]
+  return userData;
+}
+
+export const checkGoogleResAuth=()=>{
+  const userData=[
+    body("secret").trim().notEmpty().withMessage("provide secrete "),
+    body("token").trim().notEmpty().withMessage("provide token ")
+  ]
+  return userData;
 }

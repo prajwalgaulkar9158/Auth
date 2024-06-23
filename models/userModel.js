@@ -19,3 +19,14 @@ export const findUser = async (params) => {
     return { error };
   }
 };
+
+export const updateUserSecrete =async(email,secret)=>{
+  try {
+    const user = await userModel.updateOne({
+     email:email
+    },{$set:{secret:secret}});
+    return {user}
+  } catch (error) {
+    return {error}
+  }
+}

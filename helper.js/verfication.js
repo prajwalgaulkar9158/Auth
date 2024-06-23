@@ -1,4 +1,6 @@
 import { smpt, email, twilioClient, twilioConfig } from "../config/config.js";
+import _otplib from 'otplib'
+import qr from "qrcode"
 
 export const sendMail = async (token, emailTo) => {
   try {
@@ -58,4 +60,26 @@ export const otpVerification = async (otp, contact) => {
   } catch (error) {
     return { error };
   }
+};
+
+export const generateSecret = () => {
+  const secret = _otplib.authenticator.generateSecret();
+  return secret;
+};
+
+export const generateQRCode = async (secret, user) => {
+  const otpauth = _otplib.authenticator.keyuri(user.email, 'prajAuth', secret);
+  try {
+    const qrCodeImageUrl = await qr.toBuffer(otpauth);
+    return qrCodeImageUrl;
+  } catch (err) {
+    console.error('Error generating QR code:', err);
+    throw new Error('Failed to generate QR code');
+  }
+};
+
+
+// google auth otp
+export const verifyOTP = (token, secret) => {
+  return _otplib.authenticator.check(token, secret);
 };
